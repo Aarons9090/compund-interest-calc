@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+
+    <div class="background">
+        <div class="filter-bar">
+            <form>
+                <h1>Korkoa korolle -laskuri</h1>
+                <div class="filters">
+                    <div class="filter-row">
+                        <div class="row-item">
+                            <label for="capital">Alkupääoma</label><br>
+                            <div class="input-row">
+                                <input type="number" id="capital" placeholder="1000" min="0" max="10000000" oninput="validity.valid||(value='');" style="width: 130px;">
+                                <label>€</label>
+                            </div>
+
+                        </div>
+                        <div class="row-item">
+                            <label for="saving">Säästö</label><br>
+                            <div class="input-row">
+                                <input type="number" id="saving" placeholder="100" min="0" max="10000" oninput="validity.valid||(value='');" style="width: 88px;">
+                                <label>€ per</label>
+                                <input type="number" style="width: 121px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="row-item">
+                            <label for="capital">Vuosikorko</label><br>
+                            <div class="input-row">
+                                <input type="number" id="interest" placeholder="5" min="0" max="99" oninput="validity.valid||(value='');" style="width: 88px;">
+                                <label>%</label>
+                            </div>
+
+                        </div>
+                        <div class="row-item">
+                            <label for="saving">Sijoitusaika</label><br>
+                            <div class="input-row">
+                                <input type="number" id="investment-time" placeholder="10" min="0" max="99" oninput="validity.valid||(value='');" style="width: 88px;">
+                                <label>vuotta</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="result-bar">
+            <h1>Sijoitus ajanjakson päättessä</h1>
+            <div class="result-row">
+                <div class="result-row-item">
+                    Säästetty summa
+                    <div class="card" id="capital-bubble">
+                        8300€
+                    </div>
+                </div>
+                <span>+</span>
+                <div class="result-row-item" >
+                    Ansaittu korko
+                    <div class="card" id="interest-bubble">
+                        4045€
+                    </div>
+                </div>
+                <span>=</span>
+                <div class="result-row-item">
+                    Summa
+                    <div class="card"  id="result-bubble">
+                        12345€
+                    </div>
+                </div>
+            </div>
+            <canvas id="result-chart">
+
+            </canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        function updateChart(chart, data) {
+            const time = Number(data.time.value);
+            const capital = Number(data.capital.value);
+            const saving = Number(data.saving.value);
+            const interest = Number(data.interest.value) / 100
+            const years = Array.from({ length: time }, (_, index) => index + 1);
+
+            const total = years.map(y => {
+                let sum = capital;
+                for (i = 0; i < y * 12; ++i) {
+                    sum *= (1 + interest / 12)
+                    sum += saving
+                }
+                const interest_multiplier = 1 + (interest / 100)
+                return Math.round(sum);
+            })
+
+            const totalOnePercentFee = years.map(y => {
+                let sum = capital;
+                for (i = 0; i < y * 12; ++i) {
+                    sum *= (1 + (interest-0.01) / 12)
+                    sum += saving
+                }
+                const interest_multiplier = 1 + (interest / 100)
+                return Math.round(sum);
+            })
+
+            const noInteresTotal = years.map(y => {
+                return Math.round(capital + y * 12 * saving);
+            })
+
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            document.getElementById("capital-bubble").innerHTML = Math.round(noInteresTotal.slice(-1)).toLocaleString()+ "€";
+            document.getElementById("interest-bubble").innerHTML = Math.round(total.slice(-1) - noInteresTotal.slice(-1)).toLocaleString() + "€";
+            document.getElementById("result-bubble").innerHTML = Math.round(total.slice(-1)).toLocaleString() + "€";
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: years,
+                    datasets: [
+
+                        {
+                            label: "Kokonaissijoitus ilman korkoa",
+                            data: noInteresTotal,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            backgroundColor: "rgb(31, 96, 133)"
+                        },
+                        {
+                            label: "Kokonaissijoitus koron kanssa 1% kokonaiskuluilla",
+                            data: totalOnePercentFee,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            backgroundColor: "rgb(93, 71, 179)"
+                        },
+                        {
+                            label: 'Kokonaissijoitus koron kanssa',
+                            data: total,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            backgroundColor: "rgb(65, 240, 158)"
+                        },]
+                },
+                options: {
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                        },
+                    scales: {
+                        
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: "Vuosi"
+                            }
+                            
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: "Kokonaissumma"
+                            }
+                        }
+                    }
+                }
+            });
+
+            return chart
+        }
+
+        const ctx = document.getElementById('result-chart');
+
+        let capital = document.getElementById("capital");
+        capital.value = "1000"
+
+        let saving = document.getElementById("saving");
+        saving.value = "100"
+        let interest = document.getElementById("interest");
+        interest.value = "5"
+        let time = document.getElementById("investment-time");
+        time.value = "10"
+
+        const data = {
+            capital,
+            saving,
+            interest,
+            time
+        }
+
+        Object.values(data).map(element => {
+            element.addEventListener("change", function () {
+                chart = updateChart(chart, data);
+            })
+        })
+
+        let chart = updateChart(null, data);
+    </script>
+</body>
+
+</html>

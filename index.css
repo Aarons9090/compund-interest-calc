@@ -1,0 +1,107 @@
+:root {
+    --primary-color: rgb(31, 96, 133);
+    --primary-dropshadow: 0px 2px 4px rgba(0,0,0,0.25);
+    --inner-shadow: inset 0px 2px 4px rgba(0,0,0,0.20);
+
+    font-family: 'Archivo', sans-serif;
+
+}
+
+body {
+    background-color: rgb(207, 207, 207);
+}
+
+.background {
+    width: 100%;
+    height: 250px;
+    background-color: var(--primary-color);
+    position: absolute;
+}
+
+.filter-bar, .result-bar {
+    background-color: rgb(255, 255, 255);
+    width: 80%;
+    max-width: 800px;
+    margin: 60px auto 30px auto;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--primary-dropshadow);
+    border-radius: 5px;
+    color: var(--primary-color);
+}
+
+input {
+    height: 36px;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    box-shadow: var(--inner-shadow);
+    margin: 5px 0 5px 0;
+}
+
+.filters {
+    width: 80%;
+    margin: 0 auto;
+}
+.filter-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+.row-item {
+    text-align: left;
+    width: 300px;
+}
+
+.input-row label {
+    padding: 10px;
+    font-weight: 400;
+}
+
+h1, label {
+    font-weight: 600;
+    
+}
+
+h1 {
+    font-size: 28;
+}
+
+label {
+    font-size: 20;
+    font-weight: 600;
+}
+
+.result-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+.result-row span {
+    padding: 20px;
+    line-height: 4rem;
+    font-size: 28px;
+}
+
+.result-row-item {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.card {
+    margin: 10px;
+    padding: 15px 20px 15px 20px;
+    box-shadow: var(--primary-dropshadow);
+    font-size: 28px;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+canvas {
+    width: 80%;
+    height: 400px;
+}
