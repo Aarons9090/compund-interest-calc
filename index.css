@@ -2,32 +2,35 @@
     --primary-color: rgb(31, 96, 133);
     --primary-dropshadow: 0px 2px 4px rgba(0,0,0,0.25);
     --inner-shadow: inset 0px 2px 4px rgba(0,0,0,0.20);
-
     font-family: 'Archivo', sans-serif;
-
 }
 
 body {
     background-color: rgb(207, 207, 207);
+    margin: 0;
 }
 
 .background {
     width: 100%;
-    height: 250px;
     background-color: var(--primary-color);
     position: absolute;
 }
 
-.filter-bar, .result-bar {
-    background-color: rgb(255, 255, 255);
-    width: 80%;
-    max-width: 800px;
+.content {
+    background-color: white;
+    width: 85%;
+    max-width: 900px;
     margin: 60px auto 30px auto;
-    padding: 20px;
+    padding: 30px;
     text-align: center;
     box-shadow: var(--primary-dropshadow);
     border-radius: 5px;
     color: var(--primary-color);
+}
+
+.filter-bar {
+    background-color: var(--primary-color);
+    color: white;
 }
 
 input {
@@ -49,6 +52,8 @@ input {
     padding: 20px;
 }
 
+
+
 .row-item {
     text-align: left;
     width: 300px;
@@ -61,15 +66,28 @@ input {
 
 h1, label {
     font-weight: 600;
-    
+}
+
+p {
+    text-align: left;
 }
 
 h1 {
     font-size: 28;
+    color: var(--primary-color)
+}
+
+h2 {
+    padding: 15px 0px 15px 0px
 }
 
 label {
     font-size: 20;
+    font-weight: 600;
+}
+
+.total-sum {
+    font-size: 52px;
     font-weight: 600;
 }
 
@@ -99,6 +117,8 @@ label {
     font-size: 28px;
     font-weight: 600;
     border-radius: 10px;
+    background-color: var(--primary-color);
+    color: white;
 }
 
 canvas {
